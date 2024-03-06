@@ -26,7 +26,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
             <hr>
             <div class="centered">
                 <a class="button" href="./managehotlists.php">Hot Lists</a>
-                <a class="button" href="./ignorelists.php">Ignore Lists</a>
+                <a class="button" href="./manageignorelists.php">Ignore Lists</a>
             </div>
         </main>
     </body>

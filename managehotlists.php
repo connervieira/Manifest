@@ -23,6 +23,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
     </head>
     <body class="truebody">
         <main class="mainbody centeredsection">
+            <a class="button" href="index.php">Back</a>
             <h1>Predator</h1>
             <h2>Hot-List Management</h2>
             <p>This tool allows system administrators to manage license plate hot lists for Predator instances. It should be noted that this tool only affects Predator instances that have this server in their remote alert list sources.</p>
@@ -48,7 +49,6 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
             } else if ($_POST["submit"] == "Remove") { // Check to see if a plate to remove was submitted.
                 unset($hotlist[$_POST["plate"]]); // Remove the plate from the dictionary
                 file_put_contents($manifest_config["files"]["hotlist"], json_encode($hotlist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
-                header("Location: ."); // Redirect the user after removing the plate.
             }
             ?>
             <hr>
