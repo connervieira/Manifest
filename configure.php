@@ -59,6 +59,12 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     }
                 }
 
+                $manifest_config["files"]["hotlist"]["path"] = $_POST["files>hotlist>path"];
+                $manifest_config["files"]["hotlist"]["active_id"] = $_POST["files>hotlist>active_id"];
+                $manifest_config["files"]["ignorelist"]["path"] = $_POST["files>ignorelist>path"];
+                $manifest_config["files"]["ignorelist"]["active_id"] = $_POST["files>ignorelist>active_id"];
+
+
                 if ($valid == true) {
                     file_put_contents($manifest_config_database_name, json_encode($manifest_config, (JSON_UNESCAPED_SLASHES)));
                     echo "<p>Successfully updated configuration.</p>";
@@ -96,7 +102,16 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     <label for="auth>admins">Admins:</label> <input type="string" name="auth>admins" id="auth>admins" placeholder="user1,user2" value="<?php echo $formatted_admins_list; ?>"><br>
                     <label for="auth>access>whitelist">Whitelist:</label> <input type="string" name="auth>access>whitelist" id="auth>access>whitelist" placeholder="user1,user2" value="<?php echo $formatted_whitelist; ?>"><br>
                     <label for="auth>access>blacklist">Blacklist:</label> <input type="string" name="auth>access>blacklist" id="auth>access>blacklist" placeholder="user1,user2" value="<?php echo $formatted_blacklist; ?>"><br>
-                    <input type="submit" name="submit" id="submit" value="Submit">
+
+                    <br><br><h3>Files</h3>
+                    <br><h4>Hot List</h4>
+                    <label for="files>hotlist>path">Path:</label> <input type="string" name="files>hotlist>path" id="files>hotlist>path" placeholder="./listhot.json" value="<?php echo $manifest_config["files"]["hotlist"]["path"]; ?>"><br>
+                    <label for="files>hotlist>active_id">Active ID:</label> <input type="string" name="files>hotlist>active_id" id="files>hotlist>active_id" placeholder="publichot" value="<?php echo $manifest_config["files"]["hotlist"]["active_id"]; ?>"><br>
+                    <br><h4>Ignore List</h4>
+                    <label for="files>ignorelist>path">Path:</label> <input type="string" name="files>ignorelist>path" id="files>ignorelist>path" placeholder="./listignore.json" value="<?php echo $manifest_config["files"]["ignorelist"]["path"]; ?>"><br>
+                    <label for="files>ignorelist>active_id">Active ID:</label> <input type="string" name="files>ignorelist>active_id" id="files>ignorelist>active_id" placeholder="publichot" value="<?php echo $manifest_config["files"]["ignorelist"]["active_id"]; ?>"><br>
+
+                    <br><input type="submit" name="submit" id="submit" value="Submit">
                 </form>
             </div>
         </main>
