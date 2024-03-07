@@ -2,4 +2,4 @@
 
 This is an informal to-do list for Manifest. This is not a comprehensive change-log, nor is it an official declaration of upcoming features.
 
-- [ ] Create configuration page.
+- [X] Create configuration page.

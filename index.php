@@ -21,6 +21,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
     </head>
     <body class="truebody">
         <main class="mainbody centeredsection">
+            <a class="button" href="./configure.php">Configure</a>
             <h1>Manifest</h1>
             <p>This tool allows administrators to manage license plate lists for Predator instances. It should be noted that this tool only affects Predator instances that have this server in their remote alert list sources.</p>
             <hr>

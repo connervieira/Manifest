@@ -5,7 +5,7 @@ $force_login_redirect = true;
 include strval($manifest_config["auth"]["provider"]);
 
 if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check to see if this user is authorized to be here.
-    echo "<p>This tool is for use only by V0LT Administrators!</p>";
+    echo "<p>This tool is for use only by administrators!</p>";
     exit();
 }
 ?>
