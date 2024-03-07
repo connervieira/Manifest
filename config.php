@@ -11,13 +11,15 @@ if (is_writable(".") == false) {
 if (file_exists($manifest_config_database_name) == false) { // Check to see if the database file doesn't exist.
     $manifest_configuration_database_file = fopen($manifest_config_database_name, "w") or die("Unable to create configuration database file."); // Create the file.
 
-    $manifest_config["auth"]["admins"] = ["cvieira"];
+    $manifest_config["auth"]["admins"] = ["cvieira"]; // TODO: Replace
     $manifest_config["auth"]["provider"] = "../dropauth/authentication.php";
     $manifest_config["auth"]["access"]["mode"] = "whitelist";
     $manifest_config["auth"]["access"]["whitelist"] = [];
     $manifest_config["auth"]["access"]["blacklist"] = [];
-    $manifest_config["files"]["ignore"] = "./listignore.json";
-    $manifest_config["files"]["hotlist"] = "./listhot.json";
+    $manifest_config["files"]["ignore"]["path"] = "./listignore.json";
+    $manifest_config["files"]["ignore"]["active_id"] = "publicignorelist";
+    $manifest_config["files"]["hotlist"]["path"] = "./listhot.json";
+    $manifest_config["files"]["hotlist"]["active_id"] = "emergencyhotlist";
     $manifest_config["product_name"] = "Manifest";
 
     fwrite($manifest_configuration_database_file, json_encode($manifest_config, (JSON_UNESCAPED_SLASHES))); // Set the contents of the database file to the placeholder configuration.
