@@ -43,6 +43,9 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
 
 
             if ($_POST["submit"] == "Add") {
+                if (isset($ignore_list[$list_id]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
+                    $ignore_list[$list_id]["contents"] = array();
+                }
                 array_push($ignore_list[$list_id]["contents"], strtoupper($_POST["plate"]));
                 file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignore_list, JSON_PRETTY_PRINT)); // Save the modified list to disk.
             } else if ($_POST["submit"] == "Remove") { // Check to see if a plate to remove was submitted.
@@ -74,7 +77,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
             <div class="basicform">
                 <h3>Select Plate</h3>
                 <?php
-                    foreach ($ignore_list as $plate) {
+                    foreach ($ignore_list[$list_id]["contents"] as $plate) {
                         echo "<a href='?plate=" . $plate . "'>" . $plate . "</a><br><br>";
                     }
                 ?>
