@@ -13,3 +13,4 @@ This document contains a list of all the changes for each version of Manifest.
     - Ignore list management/distribution
     - Hot list management/distribution
     - Basic configuration interface
+    - Basic multi-user support

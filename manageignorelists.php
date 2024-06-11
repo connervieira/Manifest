@@ -3,33 +3,37 @@ include "./config.php";
 
 $force_login_redirect = true;
 include strval($manifest_config["auth"]["provider"]);
-
-if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check to see if this user is authorized to be here.
-    echo "<p>This tool is for use only by administrators!</p>";
-    exit();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Manifest - Manage Predator Ignore-lists</title>
+        <title><?php echo htmlspecialchars($manifest_config["product_name"]); ?> - Manage Predator Ignore-lists</title>
         <script async defer data-domain="v0lttech.com" src="/js/plausible.js"></script>
-        
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="/files/fonts/lato/latofonts.css">
-        <link rel="stylesheet" href="/styles/main.css">
-        <?php include "../../loadtheme.php"; ?>
+        <link rel="stylesheet" href="./fonts/lato/latofonts.css">
+        <link rel="stylesheet" href="./styles/main.css">
     </head>
     <body class="truebody">
         <main class="mainbody centeredsection">
-            <a class="button" href="index.php">Back</a>
-            <h1>Predator</h1>
+            <div class="navbar">
+                <a class="button" href="index.php">Back</a>
+            </div>
+            <h1><?php echo htmlspecialchars($manifest_config["product_name"]); ?></h1>
             <h2>Ignore-List Management</h2>
-            <p>This tool allows system administrators to manage license plate egnore lists for Predator instances. It should be noted that this tool only affects Predator instances that have this server in their remote alert list sources.</p>
+            <p>This tool allows system users to manage license plate ignore-lists for Predator instances. It should be noted that this tool only affects Predator instances that have this source in their ignore list sources.</p>
+            <p>To add this list as a source, simply add the following URL to the Predator configuration: 
             <?php
-            $list_id = $manifest_config["files"]["ignorelist"]["active_id"];
-
+            $serve_url = "./serve.php?type=ignore";
+            if ($username !== $manifest_config["files"]["hotlist"]["active_id"]) {
+                $serve_url .= "&id=" . $username;
+            }
+            if (strlen($manifest_config["users"][$username]["settings"]["access_key"]) > 0) {
+                $serve_url .= "&key=" . $manifest_config["users"][$username]["settings"]["access_key"];
+            }
+            echo "<a href='" . $serve_url . "'>Source</a>";
+            ?>
+            </p>
+            <?php
             if (!file_exists($manifest_config["files"]["ignorelist"]["path"])) { // Check to see if the file doesn't already exists.
                 file_put_contents($manifest_config["files"]["ignorelist"]["path"], "{}"); // Create a blank list file.
             }
@@ -41,16 +45,26 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
             $ignore_list = json_decode(file_get_contents($manifest_config["files"]["ignorelist"]["path"]), true); // Load the ignore list contents from the file.
             $ignore_list["meta"]["type"] = "ignorelist";
 
+            if ($manifest_config["users"][$username]["permissions"]["list_capacity_ignore"] > -1) { // Check to see if an individual override is set for this user's list capacity.
+                $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_capacity_ignore"];
+            } else { // Otherwise, use the default list capacity.
+                $users_max_list_size = $manifest_config["permissions"]["max_size"]["ignore"];
+            }
+
 
             if ($_POST["submit"] == "Add") {
-                if (isset($ignore_list[$list_id]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
-                    $ignore_list[$list_id]["contents"] = array();
+                if (isset($ignore_list["lists"][$username]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
+                    $ignore_list["lists"][$username]["contents"] = array();
                 }
-                array_push($ignore_list[$list_id]["contents"], strtoupper($_POST["plate"]));
-                file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignore_list, JSON_PRETTY_PRINT)); // Save the modified list to disk.
+                if (sizeof($ignore_list["lists"][$username]["contents"]) < $users_max_list_size) {
+                    array_push($ignore_list["lists"][$username]["contents"], strtoupper($_POST["plate"]));
+                    file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignore_list, JSON_PRETTY_PRINT)); // Save the modified list to disk.
+                } else {
+                    echo "<p>Your list already contains the maximum number of allowed entries. Please either remove existing list entries or upgrade your account.</p>";
+                }
             } else if ($_POST["submit"] == "Remove") { // Check to see if a plate to remove was submitted.
-                if (($key = array_search($_POST["plate"], $ignore_list[$list_id]["contents"])) !== false) {
-                    unset($ignore_list[$list_id]["contents"][$key]);
+                if (($key = array_search($_POST["plate"], $ignore_list["lists"][$username]["contents"])) !== false) {
+                    unset($ignore_list["lists"][$username]["contents"][$key]);
                 } else {
                     echo "<p>The specified plate does not exist in the ignore list.</p>";
                 }
@@ -62,7 +76,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                 <h3>Add Plate</h3>
                 <form method="POST">
                     <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate"><br>
-                    <input type="submit" name="submit" value="Add" class="formbutton">
+                    <input type="submit" name="submit" value="Add" class="button">
                 </form>
             </div>
             <hr>
@@ -70,15 +84,16 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                 <h3>Remove Plate</h3>
                 <form method="POST">
                     <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>"><br>
-                    <input type="submit" name="submit" value="Remove" class="formbutton">
+                    <input type="submit" name="submit" value="Remove" class="button">
                 </form>
             </div>
             <hr>
             <div class="basicform">
                 <h3>Select Plate</h3>
+                <br>
                 <?php
-                    foreach ($ignore_list[$list_id]["contents"] as $plate) {
-                        echo "<a href='?plate=" . $plate . "'>" . $plate . "</a><br><br>";
+                    foreach ($ignore_list["lists"][$username]["contents"] as $plate) {
+                        echo "<a class='button' href='?plate=" . $plate . "'>" . $plate . "</a><br><br style='margin-top:5px;'>";
                     }
                 ?>
             </div>

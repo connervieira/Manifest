@@ -12,19 +12,18 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Manifest - Manage Configuration</title>
+        <title><?php echo htmlspecialchars($manifest_config["product_name"]); ?> - Manage Configuration</title>
         <script async defer data-domain="v0lttech.com" src="/js/plausible.js"></script>
         
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <link rel="stylesheet" href="/files/fonts/lato/latofonts.css">
-        <link rel="stylesheet" href="/styles/main.css">
-        <?php include "../../loadtheme.php"; ?>
+        <link rel="stylesheet" href="./fonts/lato/latofonts.css">
+        <link rel="stylesheet" href="./styles/main.css">
     </head>
     <body class="truebody">
         <main class="mainbody centeredsection">
-            <a class="button" href="index.php">Back</a>
-            <h1>Predator</h1>
+            <div class="navbar">
+                <a class="button" href="index.php">Back</a>
+            </div>
+            <h1><?php echo htmlspecialchars($manifest_config["product_name"]); ?></h1>
             <h2>Configure</h2>
             <?php
             if ($_POST["submit"] == "Submit") {
@@ -57,6 +56,19 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     if ($manifest_config["auth"]["access"]["blacklist"][$key] == "") {
                         unset($manifest_config["auth"]["access"]["blacklist"][$key]);
                     }
+                }
+
+                if (intval($_POST["permissions>max_size>hot"]) >= -1) {
+                    $manifest_config["permissions"]["max_size"]["hot"] = intval($_POST["permissions>max_size>hot"]);
+                } else {
+                    echo "<p>The max ignore list size is lower than expected.</p>";
+                    $valid = false;
+                }
+                if (intval($_POST["permissions>max_size>ignore"]) >= -1) {
+                    $manifest_config["permissions"]["max_size"]["ignore"] = intval($_POST["permissions>max_size>ignore"]);
+                } else {
+                    echo "<p>The max ignore list size is lower than expected.</p>";
+                    $valid = false;
                 }
 
                 $manifest_config["files"]["hotlist"]["path"] = $_POST["files>hotlist>path"];
@@ -103,15 +115,19 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     <label for="auth>access>whitelist">Whitelist:</label> <input type="string" name="auth>access>whitelist" id="auth>access>whitelist" placeholder="user1,user2" value="<?php echo $formatted_whitelist; ?>"><br>
                     <label for="auth>access>blacklist">Blacklist:</label> <input type="string" name="auth>access>blacklist" id="auth>access>blacklist" placeholder="user1,user2" value="<?php echo $formatted_blacklist; ?>"><br>
 
-                    <br><br><h3>Files</h3>
-                    <br><h4>Hot List</h4>
+                    <br><h3>Permissions</h3>
+                    <label for="permissions>max_size>hot">Max Hot-List Entries:</label> <input type="number" name="permissions>max_size>hot" id="permissions>max_size>hot" placeholder="10" value="<?php echo $manifest_config["permissions"]["max_size"]["hot"]; ?>"><br>
+                    <label for="permissions>max_size>ignore">Max Ignore-List Entries:</label> <input type="number" name="permissions>max_size>ignore" id="permissions>max_size>ignore" placeholder="10" value="<?php echo $manifest_config["permissions"]["max_size"]["ignore"]; ?>"><br>
+
+                    <br><h3>Files</h3>
+                    <h4>Hot List</h4>
                     <label for="files>hotlist>path">Path:</label> <input type="string" name="files>hotlist>path" id="files>hotlist>path" placeholder="./listhot.json" value="<?php echo $manifest_config["files"]["hotlist"]["path"]; ?>"><br>
-                    <label for="files>hotlist>active_id">Active ID:</label> <input type="string" name="files>hotlist>active_id" id="files>hotlist>active_id" placeholder="publichot" value="<?php echo $manifest_config["files"]["hotlist"]["active_id"]; ?>"><br>
+                    <label for="files>hotlist>active_id">Default ID:</label> <input type="string" name="files>hotlist>active_id" id="files>hotlist>active_id" placeholder="publichot" value="<?php echo $manifest_config["files"]["hotlist"]["active_id"]; ?>"><br>
                     <br><h4>Ignore List</h4>
                     <label for="files>ignorelist>path">Path:</label> <input type="string" name="files>ignorelist>path" id="files>ignorelist>path" placeholder="./listignore.json" value="<?php echo $manifest_config["files"]["ignorelist"]["path"]; ?>"><br>
-                    <label for="files>ignorelist>active_id">Active ID:</label> <input type="string" name="files>ignorelist>active_id" id="files>ignorelist>active_id" placeholder="publichot" value="<?php echo $manifest_config["files"]["ignorelist"]["active_id"]; ?>"><br>
+                    <label for="files>ignorelist>active_id">Default ID:</label> <input type="string" name="files>ignorelist>active_id" id="files>ignorelist>active_id" placeholder="publicignore" value="<?php echo $manifest_config["files"]["ignorelist"]["active_id"]; ?>"><br>
 
-                    <br><input type="submit" name="submit" id="submit" value="Submit">
+                    <br><input class="button" type="submit" name="submit" id="submit" value="Submit">
                 </form>
             </div>
         </main>

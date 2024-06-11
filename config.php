@@ -20,6 +20,7 @@ if (file_exists($manifest_config_database_name) == false) { // Check to see if t
     $manifest_config["files"]["hotlist"]["active_id"] = "emergencyhotlist";
     $manifest_config["files"]["ignorelist"]["path"] = "./listignore.json";
     $manifest_config["files"]["ignorelist"]["active_id"] = "publicignorelist";
+    $manifest_config["users"] = array();
     $manifest_config["product_name"] = "Manifest";
 
     fwrite($manifest_configuration_database_file, json_encode($manifest_config, (JSON_UNESCAPED_SLASHES))); // Set the contents of the database file to the placeholder configuration.
