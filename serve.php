@@ -24,12 +24,12 @@ if ($id == "" or $id == null) { // If no ID is set, then simply return the defau
 
 if (strlen($manifest_config["users"][$id]["settings"]["access_key"]) > 0) { // Check to see if an access key was set by this user.
     if ($key == $manifest_config["users"][$id]["settings"]["access_key"]) { // Check to see if the access key is correct.
-        $list_data = $hotlist["lists"][$id]["contents"];
+        $list_data = $hotlist["lists"][$id]["default"]["contents"];
     } else {
         echo "{\"error\": \"The supplied access key is incorrect.\"}";
     }
 } else { // Otherwise, no authentication is required.
-    $list_data = $hotlist["lists"][$id]["contents"];
+    $list_data = $hotlist["lists"][$id]["default"]["contents"];
 }
 
 if ($list_data == null) {

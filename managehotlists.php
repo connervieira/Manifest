@@ -55,34 +55,34 @@ include "./authentication.php";
                 $users_max_list_size = $manifest_config["permissions"]["max_size"]["hot"];
             }
 
-            if (isset($hotlist["lists"][$username]["contents"]) == false) { // Check to see if the hotlist contents need to be initialized.
-                $hotlist["lists"][$username]["contents"] = array();
+            if (isset($hotlist["lists"][$username]["default"]["contents"]) == false) { // Check to see if the hotlist contents need to be initialized.
+                $hotlist["lists"][$username]["default"]["contents"] = array();
             }
 
 
             if ($_POST["submit"] == "Add") {
-                if (sizeof($hotlist["lists"][$username]["contents"]) < $users_max_list_size) { // Check to see if this user's list is smaller than its max capacity.
+                if (sizeof($hotlist["lists"][$username]["default"]["contents"]) < $users_max_list_size) { // Check to see if this user's list is smaller than its max capacity.
                     $plate_to_add = strtoupper($_POST["plate"]); // Get the plate to add to the hot list from the POST data.
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["name"] = $_POST["name"];
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["description"] = $_POST["description"];
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["make"] = $_POST["make"];
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["model"] = $_POST["model"];
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["year"] = $_POST["year"];
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["author"] = $_POST["author"];
-                    $hotlist["lists"][$username]["contents"][$plate_to_add]["source"] = $_POST["source"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["name"] = $_POST["name"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["description"] = $_POST["description"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["make"] = $_POST["make"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["model"] = $_POST["model"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["year"] = $_POST["year"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["author"] = $_POST["author"];
+                    $hotlist["lists"][$username]["default"]["contents"][$plate_to_add]["source"] = $_POST["source"];
                     file_put_contents($manifest_config["files"]["hotlist"]["path"], json_encode($hotlist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
                 } else {
                     echo "<p>Your list already contains the maximum number of allowed entries. Please either remove existing list entries or upgrade your account.</p>";
                 }
             } else if ($_POST["submit"] == "Remove") { // Check to see if a plate to remove was submitted.
-                unset($hotlist["lists"][$username]["contents"][$_POST["plate"]]); // Remove the plate from the dictionary
+                unset($hotlist["lists"][$username]["default"]["contents"][$_POST["plate"]]); // Remove the plate from the dictionary
                 file_put_contents($manifest_config["files"]["hotlist"]["path"], json_encode($hotlist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
             }
             ?>
             <div class="basicform">
                 <h3>Add Plate</h3>
                 <?php
-                    echo "<p>You have used <b>" . sizeof($hotlist["lists"][$username]["contents"]) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
+                    echo "<p>You have used <b>" . sizeof($hotlist["lists"][$username]["default"]["contents"]) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>"; // TODO: Count the size of all lists.
                 ?>
                 <form method="POST">
                     <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>"><br>
@@ -111,8 +111,12 @@ include "./authentication.php";
                 <h3>Select Plate</h3>
                 <br>
                 <?php
-                    foreach ($hotlist["lists"][$username]["contents"] as $key => $plate) {
-                        echo "<a class='button' href='?plate=" . $key . "'>" . $key . "</a><br><br style='margin-top:5px;'>";
+                    if (sizeof($hotlist["lists"][$username]["default"]["contents"]) > 0){
+                        foreach ($hotlist["lists"][$username]["default"]["contents"] as $key => $plate) {
+                            echo "<a class='button' href='?plate=" . $key . "'>" . $key . "</a><br><br style='margin-top:5px;'>";
+                        }
+                    } else {
+                        echo "<p><i>This list is empty.</i></p>";
                     }
                 ?>
             </div>

@@ -53,20 +53,20 @@ include "./authentication.php";
                 $users_max_list_size = $manifest_config["permissions"]["max_size"]["ignore"];
             }
 
-            if (isset($ignore_list["lists"][$username]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
-                $ignore_list["lists"][$username]["contents"] = array();
+            if (isset($ignore_list["lists"][$username]["default"]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
+                $ignore_list["lists"][$username]["default"]["contents"] = array();
             }
 
             if ($_POST["submit"] == "Add") {
-                if (sizeof($ignore_list["lists"][$username]["contents"]) < $users_max_list_size) {
-                    array_push($ignore_list["lists"][$username]["contents"], strtoupper($_POST["plate"]));
+                if (sizeof($ignore_list["lists"][$username]["default"]["contents"]) < $users_max_list_size) {
+                    array_push($ignore_list["lists"][$username]["default"]["contents"], strtoupper($_POST["plate"]));
                     file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignore_list, JSON_PRETTY_PRINT)); // Save the modified list to disk.
                 } else {
                     echo "<p>Your list already contains the maximum number of allowed entries. Please either remove existing list entries or upgrade your account.</p>";
                 }
             } else if ($_POST["submit"] == "Remove") { // Check to see if a plate to remove was submitted.
-                if (($key = array_search($_POST["plate"], $ignore_list["lists"][$username]["contents"])) !== false) {
-                    unset($ignore_list["lists"][$username]["contents"][$key]);
+                if (($key = array_search($_POST["plate"], $ignore_list["lists"][$username]["default"]["contents"])) !== false) {
+                    unset($ignore_list["lists"][$username]["default"]["contents"][$key]);
                 } else {
                     echo "<p>The specified plate does not exist in the ignore list.</p>";
                 }
@@ -77,7 +77,7 @@ include "./authentication.php";
             <div class="basicform">
                 <h3>Add Plate</h3>
                 <?php
-                    echo "<p>You have used <b>" . sizeof($ignore_list["lists"][$username]["contents"]) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
+                    echo "<p>You have used <b>" . sizeof($ignore_list["lists"][$username]["default"]["contents"]) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
                 ?>
                 <form method="POST">
                     <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate"><br>
@@ -97,8 +97,12 @@ include "./authentication.php";
                 <h3>Select Plate</h3>
                 <br>
                 <?php
-                    foreach ($ignore_list["lists"][$username]["contents"] as $plate) {
-                        echo "<a class='button' href='?plate=" . $plate . "'>" . $plate . "</a><br><br style='margin-top:5px;'>";
+                    if (sizeof($ignore_list["lists"][$username]["default"]["contents"]) > 0){
+                        foreach ($ignore_list["lists"][$username]["default"]["contents"] as $plate) {
+                            echo "<a class='button' href='?plate=" . $plate . "'>" . $plate . "</a><br><br style='margin-top:5px;'>";
+                        }
+                    } else {
+                        echo "<p><i>This list is empty.</i></p>";
                     }
                 ?>
             </div>
