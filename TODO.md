@@ -4,4 +4,6 @@ This is an informal to-do list for Manifest. This is not a comprehensive change-
 
 - [X] Create configuration page.
 - [X] Add list serve page.
-- [ ] Add whitelist/blacklist authentication.
+- [X] Add whitelist/blacklist authentication.
+- [ ] Add user list size overrides.
+- [ ] Add list request logging.
