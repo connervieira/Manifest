@@ -4,6 +4,8 @@ include "./config.php";
 $force_login_redirect = true;
 include strval($manifest_config["auth"]["provider"]);
 
+include "./authentication.php";
+
 
 function generate_random_string($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

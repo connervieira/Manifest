@@ -3,6 +3,8 @@ include "./config.php";
 
 $force_login_redirect = true;
 include strval($manifest_config["auth"]["provider"]);
+
+include "./authentication.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +53,10 @@ include strval($manifest_config["auth"]["provider"]);
                 $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_capacity_hot"];
             } else { // Otherwise, use the default list capacity.
                 $users_max_list_size = $manifest_config["permissions"]["max_size"]["hot"];
+            }
+
+            if (isset($hotlist["lists"][$username]["contents"]) == false) { // Check to see if the hotlist contents need to be initialized.
+                $hotlist["lists"][$username]["contents"] = array();
             }
 
 

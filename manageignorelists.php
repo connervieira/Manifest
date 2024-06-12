@@ -3,6 +3,8 @@ include "./config.php";
 
 $force_login_redirect = true;
 include strval($manifest_config["auth"]["provider"]);
+
+include "./authentication.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,11 +53,11 @@ include strval($manifest_config["auth"]["provider"]);
                 $users_max_list_size = $manifest_config["permissions"]["max_size"]["ignore"];
             }
 
+            if (isset($ignore_list["lists"][$username]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
+                $ignore_list["lists"][$username]["contents"] = array();
+            }
 
             if ($_POST["submit"] == "Add") {
-                if (isset($ignore_list["lists"][$username]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
-                    $ignore_list["lists"][$username]["contents"] = array();
-                }
                 if (sizeof($ignore_list["lists"][$username]["contents"]) < $users_max_list_size) {
                     array_push($ignore_list["lists"][$username]["contents"], strtoupper($_POST["plate"]));
                     file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignore_list, JSON_PRETTY_PRINT)); // Save the modified list to disk.
@@ -74,6 +76,9 @@ include strval($manifest_config["auth"]["provider"]);
             <hr>
             <div class="basicform">
                 <h3>Add Plate</h3>
+                <?php
+                    echo "<p>You have used <b>" . sizeof($ignore_list["lists"][$username]["contents"]) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
+                ?>
                 <form method="POST">
                     <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate"><br>
                     <input type="submit" name="submit" value="Add" class="button">

@@ -4,6 +4,8 @@ include "./config.php";
 $force_login_redirect = true;
 include strval($manifest_config["auth"]["provider"]);
 
+include "./authentication.php";
+
 if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check to see if this user is authorized to be here.
     echo "<p>This tool is for use only by administrators!</p>";
     exit();
@@ -42,6 +44,12 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     if ($manifest_config["auth"]["admins"][$key] == "") {
                         unset($manifest_config["auth"]["admins"][$key]);
                     }
+                }
+                if (strtolower($_POST["auth>access>mode"]) == "whitelist" or strtolower($_POST["auth>access>mode"]) == "blacklist") {
+                    $manifest_config["auth"]["access"]["mode"] = strtolower($_POST["auth>access>mode"]);
+                } else {
+                    echo "<p>The specified access mode is invalid.</p>";
+                    $valid = false;
                 }
                 $manifest_config["auth"]["access"]["whitelist"] = explode(",", $_POST["auth>access>whitelist"]);
                 foreach ($manifest_config["auth"]["access"]["whitelist"] as $key => $user) {
@@ -112,6 +120,10 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     <h3>Authentication</h3>
                     <label for="auth>provider">Provider:</label> <input type="string" name="auth>provider" id="auth>provider" placeholder="../dropauth/authentication.php" value="<?php echo $manifest_config["auth"]["provider"] ; ?>"><br>
                     <label for="auth>admins">Admins:</label> <input type="string" name="auth>admins" id="auth>admins" placeholder="user1,user2" value="<?php echo $formatted_admins_list; ?>"><br>
+                    <label for="auth>access>mode">Access Mode:</label> <select id="auth>access>mode" name="auth>access>mode">
+                        <option value="whitelist" <?php if ($manifest_config["auth"]["access"]["mode"] == "whitelist") { echo "selected"; } ?>>Whitelist</option>
+                        <option value="blacklist" <?php if ($manifest_config["auth"]["access"]["mode"] == "blacklist") { echo "selected"; } ?>>Blacklist</option>
+                    </select><br>
                     <label for="auth>access>whitelist">Whitelist:</label> <input type="string" name="auth>access>whitelist" id="auth>access>whitelist" placeholder="user1,user2" value="<?php echo $formatted_whitelist; ?>"><br>
                     <label for="auth>access>blacklist">Blacklist:</label> <input type="string" name="auth>access>blacklist" id="auth>access>blacklist" placeholder="user1,user2" value="<?php echo $formatted_blacklist; ?>"><br>
 
