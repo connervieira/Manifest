@@ -11,7 +11,7 @@ if (is_writable(".") == false) {
 if (file_exists($manifest_config_database_name) == false) { // Check to see if the database file doesn't exist.
     $manifest_configuration_database_file = fopen($manifest_config_database_name, "w") or die("Unable to create configuration database file."); // Create the file.
 
-    $manifest_config["auth"]["admins"] = ["cvieira"]; // TODO: Replace
+    $manifest_config["auth"]["admins"] = ["admin"]; // TODO: Replace
     $manifest_config["auth"]["provider"] = "../dropauth/authentication.php";
     $manifest_config["auth"]["access"]["mode"] = "whitelist";
     $manifest_config["auth"]["access"]["whitelist"] = [];
@@ -20,6 +20,10 @@ if (file_exists($manifest_config_database_name) == false) { // Check to see if t
     $manifest_config["files"]["hotlist"]["active_id"] = "emergencyhotlist";
     $manifest_config["files"]["ignorelist"]["path"] = "./listignore.json";
     $manifest_config["files"]["ignorelist"]["active_id"] = "publicignorelist";
+    $manifest_config["permissions"]["max_capacity"]["hot"] = 10;
+    $manifest_config["permissions"]["max_capacity"]["ignore"] = 10;
+    $manifest_config["permissions"]["max_count"]["hot"] = 5;
+    $manifest_config["permissions"]["max_count"]["ignore"] = 5;
     $manifest_config["users"] = array();
     $manifest_config["product_name"] = "Manifest";
 

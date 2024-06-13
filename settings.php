@@ -37,10 +37,11 @@ function generate_random_string($length = 10) {
             if (in_array($username, array_keys($manifest_config["users"])) == false) {  // Check to see if this user's settings need to be initialized.
                 $manifest_config["users"][$username] = array();
                 $manifest_config["users"][$username]["settings"] = array();
-                $manifest_config["users"][$username]["settings"]["access_key"] = "";
                 $manifest_config["users"][$username]["permissions"] = array();
-                $manifest_config["users"][$username]["permissions"]["list_capacity_hot"] = -1;
-                $manifest_config["users"][$username]["permissions"]["list_capacity_ignore"] = -1;
+                $manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"] = -1;
+                $manifest_config["users"][$username]["permissions"]["list_capacity"]["ignore"] = -1;
+                $manifest_config["users"][$username]["permissions"]["list_count"]["hot"] = -1;
+                $manifest_config["users"][$username]["permissions"]["list_count"]["ignore"] = -1;
             }
             if ($_POST["submit"] == "Submit") {
                 $valid = true; // This will be set to false if an invalid configuration value is encountered.

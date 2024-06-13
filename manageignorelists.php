@@ -17,6 +17,11 @@ if (!in_array($selected_list, array_keys($ignorelist["lists"][$username]))) {
     exit();
 }
 
+if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["ignore"] > -1) { // Check to see if an individual override is set for this user's list capacity.
+    $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_capacity"]["ignore"];
+} else { // Otherwise, use the default list capacity.
+    $users_max_list_size = $manifest_config["permissions"]["max_capacity"]["ignore"];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,11 +58,19 @@ if (!in_array($selected_list, array_keys($ignorelist["lists"][$username]))) {
             <hr>
             <?php
             if ($_POST["submit"] == "Add") {
-                if (sizeof($ignorelist["lists"][$username][$selected_list]["contents"]) < $users_max_list_size) { // Check to see if this user's list is smaller than its max capacity.
+                if (count_users_list_entries($username, $ignorelist) < $users_max_list_size) { // Check to see if this user's list is smaller than its max capacity.
                     
-                    $plate_to_add = strtoupper($_POST["plate"]); // Get the plate to add to the ignore list from the POST data.
-                    array_push($ignorelist["lists"][$username][$selected_list]["contents"], $plate_to_add);
-                    file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignorelist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
+                    $plate_to_add = preg_replace('/\s+/', '', strtoupper($_POST["plate"]));; // Get the plate to add to the ignore list from the POST data.
+                    if ($plate_to_add == preg_replace("/[^A-Z0-9]/", '', $plate_to_add)) {
+                        if (strlen($plate_to_add) <= 12) {
+                            array_push($ignorelist["lists"][$username][$selected_list]["contents"], $plate_to_add);
+                            file_put_contents($manifest_config["files"]["ignorelist"]["path"], json_encode($ignorelist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
+                        } else {
+                            echo "<p>The specified license plate is excessively long.</p>";
+                        }
+                    } else {
+                        echo "<p>The specified license plate contains disallowed characters. License plates should only contain letters and numbers.</p>";
+                    }
                 } else {
                     echo "<p>Your list already contains the maximum number of allowed entries. Please either remove existing list entries or upgrade your account.</p>";
                 }
@@ -74,10 +87,10 @@ if (!in_array($selected_list, array_keys($ignorelist["lists"][$username]))) {
             <div class="basicform">
                 <h3>Add Plate</h3>
                 <?php
-                    echo "<p>You have used <b>" . sizeof($ignorelist["lists"][$username][$selected_list]["contents"]) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>"; // TODO: Count the size of all lists.
+                    echo "<p>You have used <b>" . count_users_list_entries($username, $ignorelist) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
                 ?>
                 <form method="POST">
-                    <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>"><br>
+                    <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" maxlength="12" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>"><br>
                     <input type="submit" name="submit" value="Add" class="button">
                 </form>
             </div>
@@ -85,7 +98,7 @@ if (!in_array($selected_list, array_keys($ignorelist["lists"][$username]))) {
             <div class="basicform">
                 <h3>Remove Plate</h3>
                 <form method="POST">
-                    <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>"><br>
+                    <label for="plate">Plate:</label> <input type="string" name="plate" id="plate" maxlength="12" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>"><br>
                     <input type="submit" name="submit" value="Remove" class="button">
                 </form>
             </div>

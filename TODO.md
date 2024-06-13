@@ -7,15 +7,18 @@ This is an informal to-do list for Manifest. This is not a comprehensive change-
 - [X] Add whitelist/blacklist authentication.
 - [ ] Add user list size overrides.
 - [ ] Add list request logging.
-- [ ] Add support for multiple lists.
-    - [X] Add the ability to create new lists.
-        - [ ] Prevent users from creating more than their max allowed number of lists.
+- [X] Add support for multiple lists.
+    - [ ] Add list management.
+        - [X] Add the ability to create new lists.
+        - [X] Add the ability to delete lists.
+        - [ ] Add the ability to edit existing lists.
+        - [X] Prevent users from creating more than their max allowed number of lists.
     - [X] Add the ability to remove lists (excluding the default list).
-    - [ ] Add the ability to add entries to specific lists.
-    - [ ] Add per-list access keys.
+    - [X] Add the ability to add entries to specific lists.
+    - [X] Add per-list access keys.
         - [X] Add per-list key storage.
-        - [ ] Add per-list authentication.
-    - [ ] Add a function for counting all plates across all of a user's lists.
-- [ ] Sanitize plates added to lists.
-    - [ ] Sanitize plates added to ignore-lists.
-    - [ ] Sanitize plates added to hot-lists.
+        - [X] Add per-list authentication.
+    - [X] Add a function for counting all plates across all of a user's lists.
+- [X] Sanitize plates added to lists.
+    - [X] Sanitize plates added to ignore-lists.
+    - [X] Sanitize plates added to hot-lists.

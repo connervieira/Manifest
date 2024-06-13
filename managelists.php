@@ -6,6 +6,19 @@ include strval($manifest_config["auth"]["provider"]);
 
 include "./authentication.php";
 include "./loadlists.php";
+
+
+if ($manifest_config["users"][$username]["permissions"]["list_count"]["hot"] > -1) { // Check to see if an individual override is set for this user's list capacity.
+    $users_max_list_count_hot = $manifest_config["users"][$username]["permissions"]["list_count"]["hot"];
+} else { // Otherwise, use the default list capacity.
+    $users_max_list_count_hot = $manifest_config["permissions"]["max_count"]["hot"];
+}
+
+if ($manifest_config["users"][$username]["permissions"]["list_count"]["ignore"] > -1) { // Check to see if an individual override is set for this user's list capacity.
+    $users_max_list_count_ignore = $manifest_config["users"][$username]["permissions"]["list_count"]["ignore"];
+} else { // Otherwise, use the default list capacity.
+    $users_max_list_count_ignore = $manifest_config["permissions"]["max_count"]["ignore"];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +47,6 @@ include "./loadlists.php";
             <h2>Create</h2>
             <?php
             if ($_POST["submit"] == "Create") {
-                preg_replace("/[^A-Za-z0-9]/", '', $_POST["access_key"]);
                 $list_type = $_POST["list_type"];
                 $list_id = preg_replace("/[^a-z0-9_\-]/", '', $_POST["list_id"]);
                 $list_name = preg_replace("/[^A-Za-z0-9_\- \']/", '', $_POST["list_name"]);
@@ -45,7 +57,7 @@ include "./loadlists.php";
                             if ($list_name == $_POST["list_name"]) {
                                 if (strlen($list_access_key) <= 50) {
                                     if ($list_access_key == $_POST["list_access_key"]) {
-                                        if ($list_name == "") { $list_name == "New List"; } // Use a default list name if one was not set.
+                                        if ($list_name == "") { $list_name = "New List"; } // Use a default list name if one was not set.
                                         if ($list_type == "hotlist") {
                                             $list_contents = &$hotlist;
                                         } else if ($list_type == "ignorelist") {
@@ -56,13 +68,17 @@ include "./loadlists.php";
                                         }
                                         $list_path = $manifest_config["files"][$list_type]["path"];
                                         if (!in_array($list_id, array_keys($list_contents["lists"][$username]))) { // Check to make sure the provided list ID is not a duplicate.
-                                            $list_contents["lists"][$username][$list_id]["name"] = $list_name;
-                                            $list_contents["lists"][$username][$list_id]["description"] = "This is a new list.";
-                                            $list_contents["lists"][$username][$list_id]["access_key"] = $list_access_key;
-                                            $list_contents["lists"][$username][$list_id]["contents"] = array();
+                                            if (sizeof(array_keys($hotlist["lists"][$username])) < $users_max_list_count_hot) {
+                                                $list_contents["lists"][$username][$list_id]["name"] = $list_name;
+                                                $list_contents["lists"][$username][$list_id]["description"] = "This is a new list.";
+                                                $list_contents["lists"][$username][$list_id]["access_key"] = $list_access_key;
+                                                $list_contents["lists"][$username][$list_id]["contents"] = array();
 
-                                            file_put_contents($list_path, json_encode($list_contents, JSON_PRETTY_PRINT));
-                                            echo "<p>Successfully created a new list.</p>";
+                                                file_put_contents($list_path, json_encode($list_contents, JSON_PRETTY_PRINT));
+                                                echo "<p>Successfully created a new list.</p>";
+                                            } else {
+                                                echo "<p>You have reached the maximum number of allowed lists for your account.</p>";
+                                            }
                                         } else {
                                             echo "<p>The provided list ID already exists.</p>";
                                         }
@@ -86,6 +102,8 @@ include "./loadlists.php";
                 }
             }
             ?>
+            <p style="margin-bottom:0px;"><?php echo sizeof(array_keys($hotlist["lists"][$username])) . "/" . $users_max_list_count_hot . " hot-lists used."; ?></p>
+            <p style="margin-top:0px;"><?php echo sizeof(array_keys($ignorelist["lists"][$username])) . "/" . $users_max_list_count_ignore . " ignore-lists used."; ?></p>
             <form method="post">
                 <label for="list_type">List Type:</label> <select name="list_type" id="list_type">
                     <option value="hotlist">Hot-List</option>

@@ -11,13 +11,6 @@ if (!is_writable($manifest_config["files"]["hotlist"]["path"])) { // Check to se
 $hotlist = json_decode(file_get_contents($manifest_config["files"]["hotlist"]["path"]), true); // Load the hot list contents from the file.
 $hotlist["meta"]["type"] = "hotlist";
 
-
-if ($manifest_config["users"][$username]["permissions"]["list_capacity_hot"] > -1) { // Check to see if an individual override is set for this user's list capacity.
-    $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_capacity_hot"];
-} else { // Otherwise, use the default list capacity.
-    $users_max_list_size = $manifest_config["permissions"]["max_size"]["hot"];
-}
-
 if (isset($hotlist["lists"][$username]["default"]["contents"]) == false) { // Check to see if the hotlist contents need to be initialized.
     $hotlist["lists"][$username]["default"]["name"] = "Default List";
     $hotlist["lists"][$username]["default"]["description"] = "This is " . $username . "'s default list.";
@@ -39,16 +32,21 @@ if (!is_writable($manifest_config["files"]["ignorelist"]["path"])) { // Check to
 $ignorelist = json_decode(file_get_contents($manifest_config["files"]["ignorelist"]["path"]), true); // Load the ignore list contents from the file.
 $ignorelist["meta"]["type"] = "ignorelist";
 
-if ($manifest_config["users"][$username]["permissions"]["list_capacity_ignore"] > -1) { // Check to see if an individual override is set for this user's list capacity.
-    $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_capacity_ignore"];
-} else { // Otherwise, use the default list capacity.
-    $users_max_list_size = $manifest_config["permissions"]["max_size"]["ignore"];
-}
-
 if (isset($ignorelist["lists"][$username]["default"]["contents"]) == false) { // Check to see if the ignore list contents need to be initialized.
     $ignorelist["lists"][$username]["default"]["name"] = "Default List";
     $ignorelist["lists"][$username]["default"]["description"] = "This is " . $username . "'s default list.";
     $ignorelist["lists"][$username]["default"]["access_key"] = "";
     $ignorelist["lists"][$username]["default"]["contents"] = array();
+}
+
+
+
+
+function count_users_list_entries($username, $list) {
+    $total_entries = 0;
+    foreach (array_keys($list["lists"][$username]) as $list_id) { // Iterate over each of this user's lists.
+        $total_entries = $total_entries + sizeof($list["lists"][$username][$list_id]["contents"]);
+    }
+    return $total_entries;
 }
 ?>
