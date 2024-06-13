@@ -79,6 +79,19 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     $valid = false;
                 }
 
+                if (intval($_POST["permissions>max_count>hot"]) >= -1) {
+                    $manifest_config["permissions"]["max_count"]["hot"] = intval($_POST["permissions>max_count>hot"]);
+                } else {
+                    echo "<p>The max ignore list count is lower than expected.</p>";
+                    $valid = false;
+                }
+                if (intval($_POST["permissions>max_count>ignore"]) >= -1) {
+                    $manifest_config["permissions"]["max_count"]["ignore"] = intval($_POST["permissions>max_count>ignore"]);
+                } else {
+                    echo "<p>The max ignore list count is lower than expected.</p>";
+                    $valid = false;
+                }
+
                 $manifest_config["files"]["hotlist"]["path"] = $_POST["files>hotlist>path"];
                 $manifest_config["files"]["hotlist"]["active_id"] = $_POST["files>hotlist>active_id"];
                 $manifest_config["files"]["ignorelist"]["path"] = $_POST["files>ignorelist>path"];
@@ -128,8 +141,11 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     <label for="auth>access>blacklist">Blacklist:</label> <input type="string" name="auth>access>blacklist" id="auth>access>blacklist" placeholder="user1,user2" value="<?php echo $formatted_blacklist; ?>"><br>
 
                     <br><h3>Permissions</h3>
-                    <label for="permissions>max_size>hot">Max Hot-List Entries:</label> <input type="number" name="permissions>max_size>hot" id="permissions>max_size>hot" placeholder="10" value="<?php echo $manifest_config["permissions"]["max_size"]["hot"]; ?>"><br>
-                    <label for="permissions>max_size>ignore">Max Ignore-List Entries:</label> <input type="number" name="permissions>max_size>ignore" id="permissions>max_size>ignore" placeholder="10" value="<?php echo $manifest_config["permissions"]["max_size"]["ignore"]; ?>"><br>
+                    <label for="permissions>max_size>hot">Max Hot-List Entries:</label> <input type="number" name="permissions>max_size>hot" id="permissions>max_size>hot" placeholder="10" step="1" value="<?php echo $manifest_config["permissions"]["max_size"]["hot"]; ?>"><br>
+                    <label for="permissions>max_size>ignore">Max Ignore-List Entries:</label> <input type="number" name="permissions>max_size>ignore" id="permissions>max_size>ignore" placeholder="10" step="1" value="<?php echo $manifest_config["permissions"]["max_size"]["ignore"]; ?>"><br>
+
+                    <label for="permissions>max_count>hot">Max Hot-List Count:</label> <input type="number" name="permissions>max_count>hot" id="permissions>max_count>hot" placeholder="5" step="1" value="<?php echo $manifest_config["permissions"]["max_count"]["hot"]; ?>"><br>
+                    <label for="permissions>max_count>ignore">Max Ignore-List Count:</label> <input type="number" name="permissions>max_count>ignore" id="permissions>max_count>ignore" placeholder="5" step="1" value="<?php echo $manifest_config["permissions"]["max_count"]["ignore"]; ?>"><br>
 
                     <br><h3>Files</h3>
                     <h4>Hot List</h4>

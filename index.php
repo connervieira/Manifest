@@ -31,8 +31,7 @@ include "./authentication.php";
             <?php
             if (strlen($username) > 0) { // Check to see if the user is currently signed in.
                 echo '<div class="centered">';
-                echo '    <a class="button" href="./managehotlists.php">Hot Lists</a>';
-                echo '    <a class="button" href="./manageignorelists.php">Ignore Lists</a>';
+                echo '    <a class="button" href="./managelists.php">Manage Lists</a>';
                 echo '</div>';
             } else { // Otherwise, the user is not currently signed in.
                 echo "<p><i>You are not currently signed in. To create and manage license plate lists, please log in.</i></p><br>";
