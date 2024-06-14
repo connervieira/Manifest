@@ -44,13 +44,13 @@ if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["ignore
             <?php
             $serve_url = "./serve.php?type=ignore";
             if ($username !== $manifest_config["files"]["ignorelist"]["active_id"]) {
-                $serve_url .= "&id=" . $username;
+                $serve_url .= "&user=" . $username;
             }
             if ($selected_list !== "default") {
                 $serve_url .= "&list=" . $selected_list;
             }
-            if (strlen($manifest_config["users"][$username]["settings"]["access_key"]) > 0) {
-                $serve_url .= "&key=" . $manifest_config["users"][$username]["settings"]["access_key"];
+            if (strlen($ignorelist["lists"][$username][$selected_list]["access_key"]) > 0) {
+                $serve_url .= "&key=" . $ignorelist["lists"][$username][$selected_list]["access_key"];
             }
             echo "<a href='" . $serve_url . "'>Source</a>";
             ?>

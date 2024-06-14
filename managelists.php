@@ -265,7 +265,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_count"]["ignore"] 
                                 echo "</select><br>";
                                 echo '<label for="list_id">List ID:</label> <input type="text" id="list_id" name="list_id" max="30" placeholder="List ID" value="' . $_GET["list"] . '" required readonly><br>';
                                 echo '<label for="list_name">List Name:</label> <input type="text" id="list_name" name="list_name" max="30" placeholder="List Name" value="' . $loaded_list["lists"][$username][$_GET["list"]]["name"] . '"><br>';
-                                echo '<label for="list_access_key">Access Key:</label> <input type="text" id="access_key" name="access_key" max="10" placeholder="abcde12345" value="' . $loaded_list["lists"][$username][$_GET["list"]]["access_key"] . '"><br>';
+                                echo '<label for="list_access_key">Access Key:</label> <input type="text" id="list_access_key" name="list_access_key" maxlength="100" placeholder="abcde12345" value="' . $loaded_list["lists"][$username][$_GET["list"]]["access_key"] . '"><br>';
                                 echo '<input class="button" id="submit" name="submit" type="submit" value="Edit">';
                             } else {
                                 echo "<p>The selected list does not exist.</p>";

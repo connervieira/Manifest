@@ -5,13 +5,13 @@ This is an informal to-do list for Manifest. This is not a comprehensive change-
 - [X] Create configuration page.
 - [X] Add list serve page.
 - [X] Add whitelist/blacklist authentication.
-- [ ] Add user list size overrides.
+- [X] Add user list size overrides.
 - [ ] Add list request logging.
 - [X] Add support for multiple lists.
-    - [ ] Add list management.
+    - [X] Add list management.
         - [X] Add the ability to create new lists.
         - [X] Add the ability to delete lists.
-        - [ ] Add the ability to edit existing lists.
+        - [X] Add the ability to edit existing lists.
         - [X] Prevent users from creating more than their max allowed number of lists.
     - [X] Add the ability to remove lists (excluding the default list).
     - [X] Add the ability to add entries to specific lists.

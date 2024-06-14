@@ -17,6 +17,7 @@ $list = json_decode(file_get_contents($file), true); // Load the hot list conten
 $user = preg_replace("/[^A-Za-z0-9\-_]/", '', strval($_GET["user"]));
 $id = preg_replace("/[^a-z0-9\-_]/", '', strval($_GET["list"]));
 $key = preg_replace("/[^A-Za-z0-9\-_]/", '', strval($_GET["key"]));
+$format = strtolower($_GET["format"])[0];
 
 if ($user == "" or $user == null) { // If no user is set, then simply return the default user.
     $user = $manifest_config["files"][$list_type . "list"]["active_id"];
@@ -24,6 +25,8 @@ if ($user == "" or $user == null) { // If no user is set, then simply return the
 if ($id == "" or $id == null) { // If no ID is set, then simply return the default database.
     $id = "default";
 }
+if ($format == "t" or $format == "y" or $format == "1") { $format = true;
+} else { $format = false; }
 
 if (!in_array($id, array_keys($list["lists"][$user]))) {
     echo "{\"error\": \"The supplied list ID does not exist.\"}";
@@ -42,6 +45,12 @@ if ($list_data == null) {
     $list_data = array();
 }
 
-echo json_encode($list_data);
+if ($format == true) {
+    echo "<pre>";
+    echo json_encode($list_data, JSON_PRETTY_PRINT);
+    echo "</pre>";
+} else {
+    echo json_encode($list_data);
+}
 
 ?>
