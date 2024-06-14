@@ -6,7 +6,6 @@ This is an informal to-do list for Manifest. This is not a comprehensive change-
 - [X] Add list serve page.
 - [X] Add whitelist/blacklist authentication.
 - [X] Add user list size overrides.
-- [ ] Add list request logging.
 - [X] Add support for multiple lists.
     - [X] Add list management.
         - [X] Add the ability to create new lists.
@@ -22,3 +21,5 @@ This is an informal to-do list for Manifest. This is not a comprehensive change-
 - [X] Sanitize plates added to lists.
     - [X] Sanitize plates added to ignore-lists.
     - [X] Sanitize plates added to hot-lists.
+- [ ] Add login redirect configuration option.
+- [ ] Add list request logging.
