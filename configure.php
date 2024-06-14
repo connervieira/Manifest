@@ -37,6 +37,12 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                     echo "<p>The specified authentication provider does not exist.</p>";
                     $valid = false;
                 }
+                if (file_exists($_POST["auth>pages>signin"]) == true) {
+                    $manifest_config["auth"]["pages"]["signin"] = $_POST["auth>pages>signin"];
+                } else {
+                    echo "<p>The specified authentication provider does not exist.</p>";
+                    $valid = false;
+                }
 
                 $manifest_config["auth"]["admins"] = explode(",", $_POST["auth>admins"]);
                 foreach ($manifest_config["auth"]["admins"] as $key => $user) {
@@ -132,6 +138,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
                 <form method="POST">
                     <h3>Authentication</h3>
                     <label for="auth>provider">Provider:</label> <input type="string" name="auth>provider" id="auth>provider" placeholder="../dropauth/authentication.php" value="<?php echo $manifest_config["auth"]["provider"] ; ?>"><br>
+                    <label for="auth>pages>signin">Sign-In Page:</label> <input type="string" name="auth>pages>signin" id="auth>pages>signin" placeholder="../dropauth/signin.php" value="<?php echo $manifest_config["auth"]["pages"]["signin"] ; ?>"><br>
                     <label for="auth>admins">Admins:</label> <input type="string" name="auth>admins" id="auth>admins" placeholder="user1,user2" value="<?php echo $formatted_admins_list; ?>"><br>
                     <label for="auth>access>mode">Access Mode:</label> <select id="auth>access>mode" name="auth>access>mode">
                         <option value="whitelist" <?php if ($manifest_config["auth"]["access"]["mode"] == "whitelist") { echo "selected"; } ?>>Whitelist</option>

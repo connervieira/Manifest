@@ -21,5 +21,5 @@ This is an informal to-do list for Manifest. This is not a comprehensive change-
 - [X] Sanitize plates added to lists.
     - [X] Sanitize plates added to ignore-lists.
     - [X] Sanitize plates added to hot-lists.
-- [ ] Add login redirect configuration option.
+- [X] Add login redirect configuration option.
 - [ ] Add list request logging.

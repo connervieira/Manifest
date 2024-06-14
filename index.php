@@ -34,9 +34,9 @@ include "./authentication.php";
                 echo '    <a class="button" href="./managelists.php">Manage Lists</a>';
                 echo '</div>';
             } else { // Otherwise, the user is not currently signed in.
-                echo "<p><i>You are not currently signed in. To create and manage license plate lists, please log in.</i></p><br>";
+                echo "<p><i>You are not currently signed in. To create and manage license plate lists, please <a href='" . $manifest_config["auth"]["pages"]["signin"] . "?redirect=" . $_SERVER['REQUEST_URI'] . "'>log in</a>.</i></p><br>";
                 echo "<p><a href='https://v0lttech.com/predator.php'>Predator ALPR</a> supports hot-lists and ignore-lists, which are a powerful way to control how the system handles certain license plates when they are detected. Predator supports the ability to load these lists from remote sources, such that the latest lists are automatically fetched from a remote server when the system starts. This also allows a single list source to be automatically distributed to multiple Predator clients.</p>";
-                echo "<p>Manifest is standalone service to manage and deploy Predator hot-lists and ignore-lists using an intuitive interface. While V0LT maintains an <a href='https://v0lttech.com/predator/manifest/'>official instance</a>, anyone can host their own copy of Manifest using its source code. To start creating your own Predator license plate lists, simply login and return to this page!</p>";
+                echo "<p>Manifest is standalone service to manage and deploy Predator hot-lists and ignore-lists using an intuitive interface. While V0LT maintains an <a href='https://v0lttech.com/predator/manifest/'>official instance</a>, anyone can host their own copy of Manifest using its source code. To start creating your own Predator license plate lists, simply <a href='" . $manifest_config["auth"]["pages"]["signin"] . "?redirect=" . $_SERVER['REQUEST_URI'] . "'>login</a> and return to this page!</p>";
             }
             ?>
         </main>

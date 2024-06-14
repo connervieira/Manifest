@@ -13,6 +13,7 @@ if (file_exists($manifest_config_database_name) == false) { // Check to see if t
 
     $manifest_config["auth"]["admins"] = ["admin"]; // TODO: Replace
     $manifest_config["auth"]["provider"] = "../dropauth/authentication.php";
+    $manifest_config["auth"]["pages"]["signin"] = "../dropauth/signin.php";
     $manifest_config["auth"]["access"]["mode"] = "whitelist";
     $manifest_config["auth"]["access"]["whitelist"] = [];
     $manifest_config["auth"]["access"]["blacklist"] = [];
