@@ -146,6 +146,7 @@ if (in_array($username, $manifest_config["auth"]["admins"]) == false) { // Check
 
                     <label for="permissions>max_count>hot">Max Hot-List Count:</label> <input type="number" name="permissions>max_count>hot" id="permissions>max_count>hot" placeholder="5" step="1" value="<?php echo $manifest_config["permissions"]["max_count"]["hot"]; ?>"><br>
                     <label for="permissions>max_count>ignore">Max Ignore-List Count:</label> <input type="number" name="permissions>max_count>ignore" id="permissions>max_count>ignore" placeholder="5" step="1" value="<?php echo $manifest_config["permissions"]["max_count"]["ignore"]; ?>"><br>
+                    <br><a class="button" href="./managepermissions.php">Manage Permission Overrides</a><br><br>
 
                     <br><h3>Files</h3>
                     <h4>Hot List</h4>
