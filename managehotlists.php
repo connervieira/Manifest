@@ -89,9 +89,9 @@ if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"] 
                         if ($valid == true) {
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["name"] = $entry_name;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["description"] = $entry_description;
-                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["make"] = $entry_make;
-                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["model"] = $entry_model;
-                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["year"] = $entry_year;
+                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["make"] = $entry_make;
+                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["model"] = $entry_model;
+                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["year"] = $entry_year;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["author"] = $entry_author;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["source"] = $entry_source;
                             file_put_contents($manifest_config["files"]["hotlist"]["path"], json_encode($hotlist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
@@ -114,18 +114,26 @@ if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"] 
                 <h3>Add Plate</h3>
                 <?php
                     echo "<p>You have used <b>" . count_users_list_entries($username, $hotlist) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
+
+                    $autofill_author = $manifest_config["users"][$username]["settings"]["defaults"]["entries"]["author"];
+                    $autofill_year = $manifest_config["users"][$username]["settings"]["defaults"]["entries"]["vehicle_year"];
+
+                    if (isset($_GET["plate"])) {
+                        $autofill_author = $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["author"];
+                        $autofill_year = $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["year"];
+                    }
                 ?>
                 <form method="POST" action="?list=<?php echo $selected_list ?>">
                     <label for="plate">Plate:</label> <input type="text" name="plate" id="plate" maxlength="12" placeholder="Plate" value="<?php echo $_GET["plate"]; ?>" required><br>
-                    <label for="name">Name:</label> <input type="text" name="name" id="name" maxlength="20" placeholder="Name" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["name"]; ?>"><br>
-                    <label for="description">Description:</label> <input type="text" name="description" id="description" maxlength="100" placeholder="Description" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["description"]; ?>"><br>
+                    <label for="name">Name:</label> <input type="text" name="name" id="name" maxlength="20" placeholder="Name" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["name"]; ?>"><br>
+                    <label for="description">Description:</label> <input type="text" name="description" id="description" maxlength="100" placeholder="Description" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["description"]; ?>"><br>
                     <br>
-                    <label for="make">Make:</label> <input type="text" name="make" id="make" maxlength="30" placeholder="Make" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["make"]; ?>"><br>
-                    <label for="model">Model:</label> <input type="text" name="model" id="model" maxlength="30" placeholder="Model" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["model"]; ?>"><br>
-                    <label for="year">Year:</label> <input type="text" name="year" id="year" min="-1" max="3000" placeholder="Year" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["year"]; ?>"><br>
+                    <label for="year">Year:</label> <input type="text" name="year" id="year" min="0" max="3000" placeholder="Year" value="<?php echo $autofill_year; ?>"><br>
+                    <label for="make">Make:</label> <input type="text" name="make" id="make" maxlength="30" placeholder="Make" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["make"]; ?>"><br>
+                    <label for="model">Model:</label> <input type="text" name="model" id="model" maxlength="30" placeholder="Model" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["model"]; ?>"><br>
                     <br>
-                    <label for="author">Author:</label> <input type="text" name="author" id="author" maxlength="30" placeholder="Author" value="V0LT" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["author"]; ?>"><br>
-                    <label for="source">Source:</label> <input type="text" name="source" id="source" maxlength="200" placeholder="Source" value="<?php echo $hotlist["lists"][$username]["contents"][$_GET["plate"]]["source"]; ?>"><br>
+                    <label for="author">Author:</label> <input type="text" name="author" id="author" maxlength="30" placeholder="Author" value="<?php echo $autofill_author; ?>"><br>
+                    <label for="source">Source:</label> <input type="text" name="source" id="source" maxlength="200" placeholder="Source" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["source"]; ?>"><br>
                     <input type="submit" name="submit" value="Add" class="button">
                 </form>
             </div>
