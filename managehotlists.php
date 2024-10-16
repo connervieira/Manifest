@@ -17,10 +17,10 @@ if (!in_array($selected_list, array_keys($hotlist["lists"][$username]))) {
     exit();
 }
 
-if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"] > -1) { // Check to see if an individual override is set for this user's list capacity.
-    $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"];
+if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1) { // Check to see if an individual override is set for this user's list capacity.
+    $users_max_list_size = $manifest_config["users"][$username]["permissions"]["list_size"]["hot"];
 } else { // Otherwise, use the default list capacity.
-    $users_max_list_size = $manifest_config["permissions"]["max_capacity"]["hot"];
+    $users_max_list_size = $manifest_config["permissions"]["max_size"]["hot"];
 }
 ?>
 <!DOCTYPE html>
@@ -60,7 +60,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"] 
 
 
             if ($_POST["submit"] == "Add") {
-                if (count_users_list_entries($username, $hotlist) < $users_max_list_size) { // Check to see if this user's list is smaller than its max capacity.
+                if (count_users_list_entries($username, $hotlist) < $users_max_list_size or $users_max_list_size < 0) { // Check to see if this user's list is smaller than its max capacity.
                     $plate_to_add = preg_replace('/\s+/', '', strtoupper($_POST["plate"])); // Get the plate to add to the hot list from the POST data.
                     if ($plate_to_add == preg_replace("/[^A-Z0-9]/", '', $plate_to_add)) { // Check to make sure the provided plate does not have any disallowed characters.
                         $entry_name = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["name"]);
@@ -113,7 +113,9 @@ if ($manifest_config["users"][$username]["permissions"]["list_capacity"]["hot"] 
             <div class="basicform">
                 <h3>Add Plate</h3>
                 <?php
-                    echo "<p>You have used <b>" . count_users_list_entries($username, $hotlist) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
+                    if ($users_max_list_size >= 0) {
+                        echo "<p>You have used <b>" . count_users_list_entries($username, $hotlist) . "/" . $users_max_list_size . "</b> allowed list entries. Entries can be removed to make more space.</p>";
+                    }
 
                     $autofill_author = $manifest_config["users"][$username]["settings"]["defaults"]["entries"]["author"];
                     $autofill_year = $manifest_config["users"][$username]["settings"]["defaults"]["entries"]["vehicle_year"];

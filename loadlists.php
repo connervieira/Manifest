@@ -45,7 +45,7 @@ if (isset($ignorelist["lists"][$username]["default"]["contents"]) == false) { //
 function count_users_list_entries($username, $list) {
     $total_entries = 0;
     foreach (array_keys($list["lists"][$username]) as $list_id) { // Iterate over each of this user's lists.
-        $total_entries = $total_entries + sizeof($list["lists"][$username][$list_id]["contents"]);
+        $total_entries += sizeof($list["lists"][$username][$list_id]["contents"]);
     }
     return $total_entries;
 }

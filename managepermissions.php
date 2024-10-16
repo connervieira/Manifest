@@ -49,18 +49,18 @@ include "./loadlists.php";
                 $valid = true; // This will be set to false if an invalid configuration value is encountered.
 
                 $user = preg_replace("/[^a-zA-Z0-9_\-]/", '', $_POST["user"]);
-                $list_capacity_hot = intval($_POST["list_capacity>hot"]);
-                $list_capacity_ignore = intval($_POST["list_capacity>ignore"]);
+                $list_size_hot = intval($_POST["list_size>hot"]);
+                $list_size_ignore = intval($_POST["list_size>ignore"]);
                 $list_count_hot = intval($_POST["list_count>hot"]);
                 $list_count_ignore = intval($_POST["list_count>ignore"]);
 
 
                 if (strlen($user) > 1 and strlen($user) < 100) {
-                    if ($list_capacity_hot < -1) { echo "<p>The max hot-list capacity is lower than expected.</p>"; $valid = false;
-                    } else if ($list_capacity_hot > 10000000) { echo "<p>The max hot-list capacity is excessively high.</p>"; $valid = false; }
+                    if ($list_size_hot < -1) { echo "<p>The max hot-list capacity is lower than expected.</p>"; $valid = false;
+                    } else if ($list_size_hot > 10000000) { echo "<p>The max hot-list capacity is excessively high.</p>"; $valid = false; }
 
-                    if ($list_capacity_ignore < -1) { echo "<p>The max ignore-list capacity is lower than expected.</p>"; $valid = false;
-                    } else if ($list_capacity_ignore > 10000000) { echo "<p>The max ignore-list capacity is excessively high.</p>"; $valid = false; }
+                    if ($list_size_ignore < -1) { echo "<p>The max ignore-list capacity is lower than expected.</p>"; $valid = false;
+                    } else if ($list_size_ignore > 10000000) { echo "<p>The max ignore-list capacity is excessively high.</p>"; $valid = false; }
 
                     if ($list_count_hot < -1) { echo "<p>The max hot-list count is lower than expected.</p>"; $valid = false;
                     } else if ($list_count_hot > 10000) { echo "<p>The max hot-list count is excessively high.</p>"; $valid = false; }
@@ -68,8 +68,8 @@ include "./loadlists.php";
                     if ($list_count_ignore < -1) { echo "<p>The max ignore-list count is lower than expected.</p>"; $valid = false;
                     } else if ($list_count_ignore > 10000) { echo "<p>The max ignore-list count is excessively high.</p>"; $valid = false; }
 
-                    $manifest_config["users"][$user]["permissions"]["list_capacity"]["hot"] = $list_capacity_hot;
-                    $manifest_config["users"][$user]["permissions"]["list_capacity"]["ignore"] = $list_capacity_ignore;
+                    $manifest_config["users"][$user]["permissions"]["list_size"]["hot"] = $list_size_hot;
+                    $manifest_config["users"][$user]["permissions"]["list_size"]["ignore"] = $list_size_ignore;
                     $manifest_config["users"][$user]["permissions"]["list_count"]["hot"] = $list_count_hot;
                     $manifest_config["users"][$user]["permissions"]["list_count"]["ignore"] = $list_count_ignore;
 
@@ -86,15 +86,15 @@ include "./loadlists.php";
             }
 
 
-                $list_capacity_ignore = intval($POST["list_capacity>ignore"]);
+                $list_size_ignore = intval($POST["list_size>ignore"]);
                 $list_count_hot = intval($POST["list_count>hot"]);
                 $list_count_ignore = intval($POST["list_count>ignore"]);
             ?>
             <div class="basicform">
                 <form method="POST">
                     <label for="user">User:</label> <input type="string" name="user" id="user" maxlength="100" placeholder="Username" value="<?php echo $selected_user; ?>" required><br>
-                    <label for="list_capacity>hot">Hot-List Capacity:</label> <input type="number" step="1" min="-1" max="10000000" name="list_capacity>hot" id="list_capacity>hot" value="<?php echo $manifest_config["users"][$selected_user]["permissions"]["list_capacity"]["hot"]; ?>" required><br>
-                    <label for="list_capacity>ignore">Ignore-List Capacity:</label> <input type="number" step="1" min="-1" max="10000000" name="list_capacity>ignore" id="list_capacity>ignore" value="<?php echo $manifest_config["users"][$selected_user]["permissions"]["list_capacity"]["ignore"]; ?>" required><br>
+                    <label for="list_size>hot">Hot-List Capacity:</label> <input type="number" step="1" min="-1" max="10000000" name="list_size>hot" id="list_size>hot" value="<?php echo $manifest_config["users"][$selected_user]["permissions"]["list_size"]["hot"]; ?>" required><br>
+                    <label for="list_size>ignore">Ignore-List Capacity:</label> <input type="number" step="1" min="-1" max="10000000" name="list_size>ignore" id="list_size>ignore" value="<?php echo $manifest_config["users"][$selected_user]["permissions"]["list_size"]["ignore"]; ?>" required><br>
                     <br>
                     <label for="list_count>hot">Hot-List Count:</label> <input type="number" step="1" min="-1" max="1000" name="list_count>hot" id="list_count>hot" value="<?php echo $manifest_config["users"][$selected_user]["permissions"]["list_count"]["hot"]; ?>" required><br>
                     <label for="list_count>ignore">Ignore-List Count:</label> <input type="number" step="1" min="-1" max="1000" name="list_count>ignore" id="list_count>ignore" value="<?php echo $manifest_config["users"][$selected_user]["permissions"]["list_count"]["ignore"]; ?>" required><br>
