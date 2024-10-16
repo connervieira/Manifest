@@ -26,7 +26,7 @@ include "./authentication.php";
         </div>
         <main class="mainbody centeredsection">
             <h1><?php echo htmlspecialchars($manifest_config["product_name"]); ?></h1>
-            <p>This tool allows administrators to manage license plate lists for Predator instances. It should be noted that this tool only affects Predator instances that have this server in their remote alert list sources.</p>
+            <p>This tool allows administrators to manage license plate lists for Predator instances.</p>
             <hr>
             <?php
             if (strlen($username) > 0) { // Check to see if the user is currently signed in.
