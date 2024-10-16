@@ -7,7 +7,7 @@ This document contains a list of all the changes for each version of Manifest.
 
 ### Initial Release
 
-*Release date to be determined*
+2024-10-16
 
 - Core functionality
     - Ignore list management/distribution
