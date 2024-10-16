@@ -9,6 +9,7 @@ A remote Predator license plate list source.
 
 Manifest is conveinent web-service for managing and distributing license plate lists to Predator clients. Manifest allows an arbitrary number of users to create both ignore-lists and hot-lists through an intuitive web interface. Manifest also makes it easy to users to add their lists to Predator as remote sources. Admins have the ability to control who can access their Manifest instance, as well as how many license plates users can add to their personal license plate lists.
 
+
 ## Features
 
 ### Robust Permissions
@@ -18,3 +19,7 @@ Manifest allows administrators to configure permissions regarding who can access
 ### Multi-List Support
 
 Manifest allows each user to create multiple license plate lists (so long as the permissions allow for it), making it easy to manage multiple devices with multiple purposes.
+
+### Offline Capable
+
+While Manifest is a network utility, it does not depend on an internet connection to function. It only needs a connection to the Predator instances you want to communicate with.
