@@ -136,7 +136,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                     <label for="year">Year:</label> <input type="text" name="year" id="year" min="0" max="3000" placeholder="Year" value="<?php echo $autofill_year; ?>"><br>
                     <label for="make">Make:</label> <input type="text" name="make" id="make" maxlength="30" placeholder="Make" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["make"]; ?>"><br>
                     <label for="model">Model:</label> <input type="text" name="model" id="model" maxlength="30" placeholder="Model" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["model"]; ?>"><br>
-                    <label for="vin">VIN:</label> <input type="text" name="vin" id="vin" min="0" max="3000" placeholder="VIN" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vin"]; ?>"><br>
+                    <label for="vin">VIN:</label> <input type="text" name="vin" id="vin" min="0" max="3000" placeholder="VIN" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["vin"]; ?>"><br>
                     <br>
                     <label for="author">Author:</label> <input type="text" name="author" id="author" maxlength="30" placeholder="Author" value="<?php echo $autofill_author; ?>"><br>
                     <label for="source">Source:</label> <input type="text" name="source" id="source" maxlength="200" placeholder="Source" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["source"]; ?>"><br>
