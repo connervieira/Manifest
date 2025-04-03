@@ -67,7 +67,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                         $entry_description = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["description"]);
                         $entry_make = preg_replace("/[^a-zA-Z0-9 \-]/", '', $_POST["make"]);
                         $entry_model = preg_replace("/[^a-zA-Z0-9 \-]/", '', $_POST["model"]);
-                        if (strlen($_POST["year"]) == ) { $entry_year = -1; } else { $entry_year = intval($_POST["year"]); }
+                        if (strlen($_POST["year"]) == 0) { $entry_year = -1; } else { $entry_year = intval($_POST["year"]); }
                         $entry_vin = preg_replace("/[^A-Z0-9]/", '', strtoupper($_POST["vin"]));
                         $entry_author = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["author"]);
                         $entry_source = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["source"]);
