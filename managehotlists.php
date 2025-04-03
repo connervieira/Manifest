@@ -67,7 +67,8 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                         $entry_description = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["description"]);
                         $entry_make = preg_replace("/[^a-zA-Z0-9 \-]/", '', $_POST["make"]);
                         $entry_model = preg_replace("/[^a-zA-Z0-9 \-]/", '', $_POST["model"]);
-                        $entry_year = intval($_POST["year"]);
+                        if (strlen($_POST["year"]) == ) { $entry_year = -1; } else { $entry_year = intval($_POST["year"]); }
+                        $entry_vin = preg_replace("/[^A-Z0-9]/", '', strtoupper($_POST["vin"]));
                         $entry_author = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["author"]);
                         $entry_source = preg_replace("/[^a-zA-Z0-9 _\-\']/", '', $_POST["source"]);
 
@@ -82,6 +83,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                         if (strlen($entry_make) > 30) { echo "<p>The supplied vehicle make excessively long.</p>"; $valid = false; }
                         if (strlen($entry_model) > 30) { echo "<p>The supplied vehicle make excessively long.</p>"; $valid = false; }
                         if ($entry_year < -1 or $entry_year > 3000) { echo "<p>The supplied vehicle year is outside of the expected range.</p>"; $valid = false; }
+                        if (strlen($entry_vin) != 0 and strlen($entry_vin) != 17) { echo "<p>The supplied vehicle VIN is an invalid length.</p>";
                         if (strlen($entry_author) > 30) { echo "<p>The supplied author excessively long.</p>"; $valid = false; }
                         if (strlen($entry_source) > 200) { echo "<p>The supplied source excessively long.</p>"; $valid = false; }
 
@@ -92,6 +94,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["make"] = $entry_make;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["model"] = $entry_model;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["year"] = $entry_year;
+                            $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["vehicle"]["vin"] = $entry_vin;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["author"] = $entry_author;
                             $hotlist["lists"][$username][$selected_list]["contents"][$plate_to_add]["source"] = $entry_source;
                             file_put_contents($manifest_config["files"]["hotlist"]["path"], json_encode($hotlist, JSON_PRETTY_PRINT)); // Save the modified list to disk.
@@ -133,6 +136,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                     <label for="year">Year:</label> <input type="text" name="year" id="year" min="0" max="3000" placeholder="Year" value="<?php echo $autofill_year; ?>"><br>
                     <label for="make">Make:</label> <input type="text" name="make" id="make" maxlength="30" placeholder="Make" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["make"]; ?>"><br>
                     <label for="model">Model:</label> <input type="text" name="model" id="model" maxlength="30" placeholder="Model" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vehicle"]["model"]; ?>"><br>
+                    <label for="vin">VIN:</label> <input type="text" name="vin" id="vin" min="0" max="3000" placeholder="VIN" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["vin"]; ?>"><br>
                     <br>
                     <label for="author">Author:</label> <input type="text" name="author" id="author" maxlength="30" placeholder="Author" value="<?php echo $autofill_author; ?>"><br>
                     <label for="source">Source:</label> <input type="text" name="source" id="source" maxlength="200" placeholder="Source" value="<?php echo $hotlist["lists"][$username][$selected_list]["contents"][$_GET["plate"]]["source"]; ?>"><br>
