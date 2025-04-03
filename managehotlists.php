@@ -83,7 +83,7 @@ if ($manifest_config["users"][$username]["permissions"]["list_size"]["hot"] > -1
                         if (strlen($entry_make) > 30) { echo "<p>The supplied vehicle make excessively long.</p>"; $valid = false; }
                         if (strlen($entry_model) > 30) { echo "<p>The supplied vehicle make excessively long.</p>"; $valid = false; }
                         if ($entry_year < -1 or $entry_year > 3000) { echo "<p>The supplied vehicle year is outside of the expected range.</p>"; $valid = false; }
-                        if (strlen($entry_vin) != 0 and strlen($entry_vin) != 17) { echo "<p>The supplied vehicle VIN is an invalid length.</p>";
+                        if (strlen($entry_vin) != 0 and strlen($entry_vin) != 17) { echo "<p>The supplied vehicle VIN is an invalid length.</p>"; }
                         if (strlen($entry_author) > 30) { echo "<p>The supplied author excessively long.</p>"; $valid = false; }
                         if (strlen($entry_source) > 200) { echo "<p>The supplied source excessively long.</p>"; $valid = false; }
 
